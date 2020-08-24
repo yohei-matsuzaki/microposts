@@ -10,6 +10,21 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+ // 中略
+ /**
+     * このユーザに関係するモデルの件数をロードする。
+     */
+    public function loadRelationshipCounts()
+    {
+        $this->loadCount('microposts');
+    }
+    /**
+     * このユーザが所有する投稿。（ Micropostモデルとの関係を定義）
+     */
+    public function microposts()
+    {
+        return $this->hasMany(Micropost::class);
+    }
     /**
      * The attributes that are mass assignable.
      *
