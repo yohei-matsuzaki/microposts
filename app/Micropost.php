@@ -14,5 +14,14 @@ class Micropost extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    } //
+    } 
+    
+    /**
+     *20200901L15課題２お気に入り機能の多対多
+     */
+    public function favorite_users()
+    {
+        return $this->belongsToMany(User::class, 'favorites', 'micropost_id','user_id')->withTimestamps();
+    
+    }  
 }
