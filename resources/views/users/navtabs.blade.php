@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs nav-justified mb-3">
+<ul class="nav nav-tabs nav-justified mb-4">
     {{-- ユーザ詳細タブ --}}
     <li class="nav-item">
         <a href="{{ route('users.show', ['user' => $user->id]) }}" class="nav-link {{ Request::routeIs('users.show') ? 'active' : '' }}">
@@ -23,8 +23,8 @@
     
      {{-- お気に入り一覧タブ --}}
     <li class="nav-item">
-        <a href="{{ route('users.favorites', ['id' => $user->id]) }}" class="nav-link {{ Request::routeIs('<users.favorites' ) ? 'active' : '' }}">
-            Followers
+        <a href="{{ route('users.favorites', ['id' => $user->id]) }}" class="nav-link {{ Request::routeIs('users.favorites' ) ? 'active' : '' }}">
+            Favorites
             <span class="badge badge-secondary">{{ $user->favorites_count }}</span>
         </a>
     </li>

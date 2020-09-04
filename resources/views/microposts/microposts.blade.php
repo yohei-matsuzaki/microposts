@@ -22,6 +22,22 @@
                             {!! Form::close() !!}
                         @endif
                     </div>
+                    
+                    {{-- お気に入り登録／アンお気に入りボタン --}}
+                    <!--@include('user_favorites.favorite_button')-->
+                    @if (Auth::id() != $user->id)
+                        @if (Auth::user()->is_favorite($micropost->id))
+                            {{-- お気に入り解除ボタンのフォーム --}}
+                            {!! Form::open(['route' => ['favorites.unfavorite', $micropost->id], 'method' => 'delete']) !!}
+                                {!! Form::submit('Unfavorite', ['class' => "btn btn-danger btn-block"]) !!}
+                            {!! Form::close() !!}
+                        @else
+                            {{-- お気に入り登録ボタンのフォーム --}}
+                            {!! Form::open(['route' => ['favorites.favorite', $micropost->id]]) !!}
+                                {!! Form::submit('Favorite', ['class' => "btn btn-primary btn-block"]) !!}
+                            {!! Form::close() !!}
+                        @endif
+                    @endif
                 </div>
             </li>
         @endforeach
@@ -29,3 +45,5 @@
     {{-- ページネーションのリンク --}}
     {{ $microposts->links() }}
 @endif
+
+

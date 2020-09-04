@@ -138,11 +138,80 @@ class User extends Authenticatable
         // それらのユーザが所有する投稿に絞り込む
         return Micropost::whereIn('user_id', $userIds);
     }
+    
     /**
      *　　20200901追加L15課題２お気に入り一覧
      */
     public function favorites()
     {
         return $this->belongsToMany(User::class, 'favorites', 'user_id','micropost_id')->withTimestamps();
+        
+        
+    }
+    
+     /**
+     *　　20200901追加L15課題２中間テーブルへのデータ登録
+     */
+    /**
+     * $micropostIdで指定された投稿をお気に入り登録する。
+     * 
+     * @param  int  $micropostId
+     * @return bool
+     */
+    public function favorite($micropostId)
+    {
+       
+        // すでにお気に入り登録しているかの確認
+        $exist = $this->is_favorite($micropostId);
+        // 相手が自分自身かどうかの確認
+        $its_me = $this->id == $micropostId;
+
+        if ($exist || $its_me) {
+            // すでにお気に入り登録していれば何もしない
+            return false;
+        } else {
+            // 未お気に入りであればお気に入りする
+            $this->favorites()->attach($micropostId);
+            return true;
+        }
+    }
+    
+     /**
+     *　　20200901追加L15課題２中間テーブルへのデータ削除
+     */
+    /**
+     * $micropost_idで指定されたお気に入り投稿をアンふぁぼする。
+     */
+    public function unfavorite($micropostId)
+    {
+       
+        // すでにフォローしているかの確認
+        $exist = $this->is_favorite($micropostId);
+        // 相手が自分自身かどうかの確認
+        $its_me = $this->id == $micropostId;
+
+        if ($exist || $its_me) {
+            // すでにお気に入り登録していればお気に入り登録を外す
+            $this->favorites()->detach($micropostId);
+            return true;
+        } else {
+            // 未お気に入りであれば何もしない
+            
+            return false;
+        }
+    }
+     /**
+     * 指定された  /**
+     * 指定された $micropostIdの投稿をこのユーザがお気に入り登録中であるか調べる。フォロー中ならtrueを返す。
+     *
+     * @param  int  $userId
+     * @return bool
+     */
+    
+    public function is_favorite($micropostId)
+    {
+        
+        //return $this->favorite()->where('micropost_id',$userId)->exists();
+        return $this->favorites()->where('micropost_id', $micropostId)->exists();
     }
 }
