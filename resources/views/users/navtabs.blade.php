@@ -21,7 +21,7 @@
         </a>
     </li>
     
-     {{-- お気に入り一覧タブ --}}
+    {{-- お気に入り一覧タブ --}}
     <li class="nav-item">
         <a href="{{ route('users.favorites', ['id' => $user->id]) }}" class="nav-link {{ Request::routeIs('users.favorites' ) ? 'active' : '' }}">
             Favorites

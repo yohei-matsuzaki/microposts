@@ -213,5 +213,6 @@ class User extends Authenticatable
         
         //return $this->favorite()->where('micropost_id',$userId)->exists();
         return $this->favorites()->where('micropost_id', $micropostId)->exists();
+        //return $this->favorites()->where('micropost_id', $userId)->exists();
     }
 }

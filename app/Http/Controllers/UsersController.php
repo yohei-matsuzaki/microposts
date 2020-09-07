@@ -98,7 +98,6 @@ class UsersController extends Controller
         
         //ユーザが追加したお気に入りを取得
         $microposts = $user->favorites()->orderBy('created_at', 'desc')->paginate(10);
-        
          // お気に入り一覧ビューでそれらを表示
         return view('users.favorites', [
             'user' => $user,

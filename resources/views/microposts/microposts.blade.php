@@ -22,7 +22,7 @@
                             {!! Form::close() !!}
                         @endif
                     </div>
-                    
+                    <div>
                     {{-- お気に入り登録／アンお気に入りボタン --}}
                     <!--@include('user_favorites.favorite_button')-->
                     @if (Auth::id() != $user->id)
@@ -38,6 +38,7 @@
                             {!! Form::close() !!}
                         @endif
                     @endif
+                    </div>
                 </div>
             </li>
         @endforeach
