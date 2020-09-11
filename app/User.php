@@ -144,9 +144,7 @@ class User extends Authenticatable
      */
     public function favorites()
     {
-        return $this->belongsToMany(User::class, 'favorites', 'user_id','micropost_id')->withTimestamps();
-        
-        
+        return $this->belongsToMany(Micropost::class, 'favorites', 'user_id', 'micropost_id')->withTimestamps();
     }
     
      /**
@@ -164,7 +162,11 @@ class User extends Authenticatable
         // すでにお気に入り登録しているかの確認
         $exist = $this->is_favorite($micropostId);
         // 相手が自分自身かどうかの確認
-        $its_me = $this->id == $micropostId;
+        // MEMO: $this->idはログインユーザーのIDであって、micropotsテーブルのidではないので、
+        // $micropostIdを元に、micropostsから該当するレコードを取得し、そのレコードのuser_idが$this->idと一致するかどうかを判別する必要があると思います
+        
+        $micropost = Micropost::find($micropostId);
+        $its_me = $this->id == $micropost->user_id;
 
         if ($exist || $its_me) {
             // すでにお気に入り登録していれば何もしない
@@ -188,15 +190,18 @@ class User extends Authenticatable
         // すでにフォローしているかの確認
         $exist = $this->is_favorite($micropostId);
         // 相手が自分自身かどうかの確認
-        $its_me = $this->id == $micropostId;
+        // MEMO: $this->idはログインユーザーのIDであって、micropotsテーブルのidではないので、
+        // $micropostIdを元に、micropostsから該当するレコードを取得し、そのレコードのuser_idが$this->idと一致するかどうかを判別する必要があると思います
+        $micropost = Micropost::find($micropostId);
+        $its_me = $this->id == $micropost->user_id;
+        //$its_me = $this->id == $micropostId;
 
-        if ($exist || $its_me) {
+        if ($exist && !$its_me) {
             // すでにお気に入り登録していればお気に入り登録を外す
             $this->favorites()->detach($micropostId);
             return true;
         } else {
             // 未お気に入りであれば何もしない
-            
             return false;
         }
     }
